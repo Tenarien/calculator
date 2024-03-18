@@ -30,3 +30,24 @@ function operate(num1, num2, operator) {
         divide(num1, num2);
     }
 };
+
+const btn = document.querySelectorAll("button");
+
+btn.forEach(button => {
+    button.addEventListener("click", () => {
+        buttonClick(button.textContent);
+    });
+});
+
+const display = document.querySelector(".display");
+
+function buttonClick(button) {
+    let displayNumber = document.createElement("p");
+    displayNumber.textContent = button;
+    display.appendChild(displayNumber);
+    console.log(displayNumber)
+}
+
+
+
+
