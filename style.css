@@ -1,4 +1,13 @@
 
+.display {
+    display: flex;
+    justify-content: center;
+}
+
+.display p {
+    border-style: solid;
+}
+
 .buttons {
     display: flex;
     flex-direction: column;
