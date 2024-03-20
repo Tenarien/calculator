@@ -6,6 +6,8 @@ let solution = '';
 let currentOperation = 1;
 let currentNumber = 1;
 
+const divideError = 'Error you cannot divide by 0';
+
 const display = document.querySelector(".display");
 const digits = document.querySelectorAll(".digit");
 const equals = document.querySelector(".equal");
@@ -50,11 +52,12 @@ digits.forEach((digit) => {
 
         if(currentNumber === 1) {
             num1 = num1 + digit.innerHTML;
-            console.log(num1)
             display.innerHTML = num1;
         } else if (currentNumber === 2) {
+            if(divideBy0(operator, num2)) {
+                return;
+            }
             num2 = num2 + digit.innerHTML;
-            console.log(num2)
             display.innerHTML = num2;
         }
 
@@ -78,6 +81,9 @@ signs.forEach((sign) => {
             currentOperation = 2;
             currentNumber = 2;
         } else if (currentNumber === 2) {
+            if(divideBy0(operator, num2)) {
+                return;
+            }
             num1 = parseInt(num1)
             num2 = parseInt(num2)
             solution = operate(num1, num2, operator);
@@ -103,16 +109,28 @@ equals.addEventListener("click", () => {
     if(num1 === '' || num2 === '' || operator === '') {
         return
     }
+    if(divideBy0(operator, num2)) {
+        return;
+    }
     num1 = parseInt(num1)
     num2 = parseInt(num2)
-    solution = operate(num1, num2, operator)
-    console.log(solution)
+    solution = operate(num1, num2, operator);
     number_1 = solution;
     num2 = '';
     currentOperation = 1;
     currentNumber = 2;
     display.innerHTML = solution;
 });
+
+const divideBy0 = function(operator, currentDivisor) {
+    if(operator === '/' && currentDivisor === '0') {
+        display.innerHTML = divideError;
+        currentDivisor = '';
+        return true;
+    }
+    return false;
+}
+
 
 
 
