@@ -3,37 +3,41 @@ let num2 = '';
 let operator = '';
 let solution = '';
 
+let currentOperation = 1;
+let currentNumber = 1;
+
 const display = document.querySelector(".display");
 const digits = document.querySelectorAll(".digit");
-const equal = document.querySelector(".equal");
+const equals = document.querySelector(".equal");
 const signs = document.querySelectorAll(".sign")
 const clear = document.querySelector(".clear");
 
 
-function add(num1, num2) {
-    return num1, num2
+const add = function(num1, num2) {
+    return num1 + num2
 };
 
-function subtract(num1, num2) {
-    solution = num1 - num2;
+const subtract = function(num1, num2) {
+    return num1 - num2;
 };
 
-function multiply(num1, num2) {
+const multiply = function(num1, num2) {
     return num1 * num2;
 };
 
-function divide(num1, num2) {
+const divide = function(num1, num2) {
     return num1 / num2;
 };
 
 function operate(num1, num2, operator) {
     if(operator === '+') {
+        return add(num1, num2)
     } else if (operator === '-') {
-        subtract(num1, num2);
+        return subtract(num1, num2);
     } else if (operator === '*') {
-        multiply(num1, num2);
+        return multiply(num1, num2);
     } else if (operate === '/') {
-        divide(num1, num2);
+        return divide(num1, num2);
     }
 };
 
@@ -41,61 +45,74 @@ function operate(num1, num2, operator) {
 
 digits.forEach((digit) => {
     digit.addEventListener("click", () => {
-        num1 = num1 + digit.innerHTML;
-        display.innerHTML = num1;
+
+        currentOperation = 1;
+
+        if(currentNumber === 1) {
+            num1 = num1 + digit.innerHTML;
+            console.log(num1)
+            display.innerHTML = num1;
+        } else if (currentNumber === 2) {
+            num2 = num2 + digit.innerHTML;
+            console.log(num2)
+            display.innerHTML = num2;
+        }
+
+        
     });
 });
 
 signs.forEach((sign) => {
     sign.addEventListener("click", () => {
-        operator = sign.innerHTML;
+        if(currentOperation === 2) {
+            num1 = parseInt(num1)
+            num2 = parseInt(num2)
+            solution = operate(num1, num1, operator);
+            display.innerHTML = solution;
+            num1 = solution;
+            operator = sign.innerHTML;
+            return;
+        }
+        if(currentNumber === 1) {
+            operator = sign.innerHTML;
+            currentOperation = 2;
+            currentNumber = 2;
+        } else if (currentNumber === 2) {
+            num1 = parseInt(num1)
+            num2 = parseInt(num2)
+            solution = operate(num1, num2, operator);
+            display.innerHTML = solution;
+            num1 = solution;
+            num2 = '';
+            operator = sign.innerHTML;
+        }
     });
 });
 
 clear.addEventListener("click", () => {
     num1 = '';
     num2 = '';
+    currentNumber = 1;
+    currentOperation = 1;
     operator = '';
     solution = '';
     display.innerHTML = '';
 });
 
-function buttonClick(button) {
-    display.textContent += parseInt(button);
-    if(button === "clear") {
-        while(display.firstChild) {
-            display.removeChild(display.firstChild);
-            num1 = "";
-            num2 = "";
-            operator = "";
-        }
+equals.addEventListener("click", () => {
+    if(num1 === '' || num2 === '' || operator === '') {
+        return
     }
-    if(button === "+" || button === "-" || button === "/" || button === "*") {
-        operator = button;
-    }
-    if(num1 === "" && button === "+" || button === "-" || button === "/" || button === "*") {
-        while(display.firstChild) {
-            num1 += parseInt(display.textContent);
-            display.removeChild(display.firstChild);
-        }
-    }
-
-    if(num1 > 0 && button === "+" || button === "-" || button === "/" || button === "*" || button === "=") {
-        while(display.firstChild) {
-            num2 += parseInt(display.textContent);
-            display.removeChild(display.firstChild);
-        }
-    }
-    
-    if(button === "=" && num1 !== "" && num2 !== "" && operator !== "") {
-        num1 = parseInt(num1)
-        num2 = parseInt(num2)
-        console.log(num1)
-        console.log(num2)
-        console.log(operator)
-        operate(num1, num2, operator);
-    }
-}
+    num1 = parseInt(num1)
+    num2 = parseInt(num2)
+    solution = operate(num1, num2, operator)
+    console.log(solution)
+    number_1 = solution;
+    num2 = '';
+    currentOperation = 1;
+    currentNumber = 2;
+    display.innerHTML = solution;
+});
 
 
 
